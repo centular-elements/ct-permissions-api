@@ -8,7 +8,7 @@
 
     <ct-user-identity id="identity"></ct-user-identity>
 
-    <iron-ajax id="getResourceTypePermissions"></iron-ajax>
+    <iron-ajax id="getResourceTypeAccess"></iron-ajax>
     <iron-ajax id="setResourceTypeAccess"></iron-ajax>
   </template>
 
@@ -23,10 +23,10 @@
        * @param {{ String, subjectResourceTypeId: String }} subjectResourceTypeId
        * @returns {Promise}
        */
-      getResourceTypePermissions: function(subjectId, subjectResourceTypeId) {
-        this.$.getResourceTypePermissions.url =
+      getResourceTypeAccess: function(subjectId, subjectResourceTypeId) {
+        this.$.getResourceTypeAccess.url =
                 this._url('/rights/permissions/resourcetypes?subject_id=' + subjectId + '&subject_type_id=' + subjectResourceTypeId);
-        return this._generateRequest(this.$.getResourceTypePermissions);
+        return this._generateRequest(this.$.getResourceTypeAccess);
       },
       /**
        * Set a subject's permissions to resource types
