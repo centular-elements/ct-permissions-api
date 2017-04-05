@@ -1,0 +1,47 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../ct-core-utils/ct-api-provider-behaviour.html">
+<link rel="import" href="../ct-core-utils/ct-user-identity.html">
+
+<dom-module id="ct-permissions-api">
+  <template>
+
+    <ct-user-identity id="identity"></ct-user-identity>
+
+    <iron-ajax id="getResourceTypePermissions"></iron-ajax>
+    <iron-ajax id="setResourceTypeAccess"></iron-ajax>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'ct-permissions-api',
+      behaviors: [CT.Behaviours.ApiProvider],
+      /**
+       * Get all permissions to resource types for the given subject
+       *
+       * @param {{ String, subjectId: String }} subjectId
+       * @param {{ String, subjectResourceTypeId: String }} subjectResourceTypeId
+       * @returns {Promise}
+       */
+      getResourceTypePermissions: function(subjectId, subjectResourceTypeId) {
+        this.$.getResourceTypePermissions.url =
+                this._url('/rights/permissions/resourcetypes?subject_id=' + subjectId + '&subject_type_id=' + subjectResourceTypeId);
+        return this._generateRequest(this.$.getResourceTypePermissions);
+      },
+      /**
+       * Set a subject's permissions to resource types
+       *
+       * @param {{ Object, subject: {id: String, resourceTypeId: String}, permissions: [{ resourceTypeId: String, permission: { access: String, permission: Integer, fieldPermissions: [{name: String, permission: Integer}] }] }} resourceTypeGrant
+       * @returns {Promise}
+       */
+      setResourceTypeAccess: function(resourceTypeGrant) {
+        this.$.setResourceTypeAccess.url = this._url('/rights/permissions/resourcetypes');
+        this.$.setResourceTypeAccess.method = "PUT";
+        this.$.setResourceTypeAccess.contentType = "application/json";
+        this.$.setResourceTypeAccess.body = resourceTypeGrant;
+        return this._generateRequest(this.$.setResourceTypeAccess);
+      }
+    });
+  </script>
+
+</dom-module>
